@@ -32,7 +32,7 @@ func MainMenu(app fyne.App) {
 	smtpHost.SetPlaceHolder("smtp.gmail.com")
 	smtpPort.SetPlaceHolder("587")
 
-	// File Picker
+	// File Picker, The location of the HTML file
 	var fileLocation string
 
 	uri := binding.NewString()
@@ -49,7 +49,7 @@ func MainMenu(app fyne.App) {
 			}
 			fileLocation = f.URI().String()
 			fileLocation = fileLocation[7:]
-			fmt.Println("chosen: ", fileLocation)
+			//! fmt.Println("chosen: ", fileLocation)
 			_ = uri.Set(f.URI().String())
 		}
 		dialog.ShowFileOpen(onChosen, myWindow)
@@ -59,7 +59,7 @@ func MainMenu(app fyne.App) {
 	entry.Disable()
 
 	button := widget.NewButtonWithIcon("OPEN", theme.FileIcon(), showFilePicker)
-	card := widget.NewCard("File Picker", "",
+	card := widget.NewCard("", "",
 		container.New(layout.NewVBoxLayout(), entry, button))
 
 	form := &widget.Form{
@@ -70,7 +70,6 @@ func MainMenu(app fyne.App) {
 			{Text: "SMTP Host", Widget: smtpHost, HintText: "Host for Email Service"},
 			{Text: "SMTP Port", Widget: smtpPort, HintText: "Port Number for Host"},
 			{Text: "HTML File", Widget: card},
-			{Widget: button},
 		},
 		OnSubmit: func() { // Print for now to console
 			log.Println("Form submitted:", subject.Text)
@@ -78,6 +77,8 @@ func MainMenu(app fyne.App) {
 			log.Println("passEmail:", passEmail.Text)
 			log.Println("smtpHost:", smtpHost.Text)
 			log.Println("smtpPort:", smtpPort.Text)
+
+			//TODO Call the send funcation?
 		},
 	}
 
