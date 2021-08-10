@@ -1,11 +1,13 @@
-package SMTP
+package sending
 
 import (
 	"bytes"
 	"text/template"
 )
 
-func setBody(location string, to string) bytes.Buffer {
+// Adds template to a bytes.Buffer.  Takes the location of the HTML template,
+// an interface{} that can be blank
+func setBody(location string, data interface{}) bytes.Buffer {
 
 	var body bytes.Buffer
 
@@ -14,11 +16,6 @@ func setBody(location string, to string) bytes.Buffer {
 
 	t, _ := template.ParseFiles(location)
 
-	t.Execute(&body, struct {
-		Email string
-	}{
-		Email: to,
-	})
-
+	t.Execute(&body, data)
 	return body
 }
