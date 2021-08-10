@@ -2,7 +2,6 @@ package menu
 
 import (
 	"fmt"
-	"log"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
@@ -11,9 +10,15 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"github.com/matte29/EmailSender/src/smtp"
 )
 
-func MainMenu(app fyne.App) {
+// Creates the MainMenu UI.
+// Takes a fyne.App, and smtpInfo by ref
+func MainMenu(app fyne.App) smtp.SMTPInfo {
+
+	var data smtp.SMTPInfo
+
 	myWindow := app.NewWindow("Email Sender")
 	myWindow.Resize(fyne.NewSize(800, 800))
 	myWindow.CenterOnScreen()
@@ -49,7 +54,7 @@ func MainMenu(app fyne.App) {
 			}
 			fileLocation = f.URI().String()
 			fileLocation = fileLocation[7:]
-			//! fmt.Println("chosen: ", fileLocation)
+			// fmt.Println("chosen: ", fileLocation)
 			_ = uri.Set(f.URI().String())
 		}
 		dialog.ShowFileOpen(onChosen, myWindow)
@@ -72,16 +77,26 @@ func MainMenu(app fyne.App) {
 			{Text: "HTML File", Widget: card},
 		},
 		OnSubmit: func() { // Print for now to console
-			log.Println("Form submitted:", subject.Text)
-			log.Println("fromEmail:", fromEmail.Text)
-			log.Println("passEmail:", passEmail.Text)
-			log.Println("smtpHost:", smtpHost.Text)
-			log.Println("smtpPort:", smtpPort.Text)
+			// log.Println("Form submitted:", subject.Text)
+			// log.Println("fromEmail:", fromEmail.Text)
+			// log.Println("passEmail:", passEmail.Text)
+			// log.Println("smtpHost:", smtpHost.Text)
+			// log.Println("smtpPort:", smtpPort.Text)
 
+			data = smtp.SMTPInfo{
+				Host:     smtpHost.Text,
+				Port:     smtpPort.Text,
+				From:     fromEmail.Text,
+				Password: passEmail.Text,
+			}
+
+			myWindow.Close()
 			//TODO Call the send funcation?
 		},
 	}
 
 	myWindow.SetContent(form)
 	myWindow.ShowAndRun()
+
+	return data
 }
