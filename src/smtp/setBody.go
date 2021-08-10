@@ -1,4 +1,4 @@
-package sending
+package smtp
 
 import (
 	"bytes"
@@ -7,7 +7,7 @@ import (
 
 // Adds template to a bytes.Buffer.  Takes the location of the HTML template,
 // an interface{} that can be blank
-func setBody(location string, data interface{}) bytes.Buffer {
+func SetBody(location string, data interface{}) bytes.Buffer {
 
 	var body bytes.Buffer
 
