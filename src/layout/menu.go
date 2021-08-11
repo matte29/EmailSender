@@ -91,7 +91,6 @@ func MainMenu(app fyne.App) smtp.SMTPInfo {
 			}
 
 			myWindow.Close()
-			//TODO Call the send funcation?
 		},
 	}
 
