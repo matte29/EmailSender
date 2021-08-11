@@ -8,7 +8,9 @@ services:
     ports:
       - "3305:3306"
     environment:
-      - "SQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
+      - "SQL_ROOT_PASSWORD=${SQL_ROOT_PASSWORD}"
       - "SQL_USER=${DB_USER}"
       - "SQL_PASSWORD=${DB_PASSWORD}"
-      - "SQL_DATABASE=${DB_NAME}"  
+      - "SQL_DATABASE=${DB_NAME}"
+
+      
