@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Email Sender</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS Styles-->
+    <link href="/static/css/navBar.css" rel="stylesheet" />
+
+    <link href="/static/css/fileSelector.css" rel="stylesheet" />
+
+    <link href="/static/css/fieldset.css" rel="stylesheet" />
+
+    <style>
+      /* Form */
+      button,
+      label,
+      input {
+        display: block;
+        font-family: inherit;
+        font-size: 100%;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        width: 100%;
+        padding: 5px;
+        height: 30px;
+      }
+
+      input {
+        box-shadow: inset 1px 1px 3px #ccc;
+        border-radius: 5px;
+      }
+
+      input:hover,
+      input:focus {
+        background-color: #eee;
+      }
+
+      input + span {
+        position: relative;
+      }
+
+      input:required + span::after {
+        font-size: 0.7rem;
+        position: absolute;
+        content: "required";
+        color: white;
+        background-color: black;
+        padding: 5px 10px;
+        top: -26px;
+        left: -70px;
+      }
+
+      input + span::before {
+        position: absolute;
+        right: -20px;
+        top: 5px;
+      }
+
+      input:invalid {
+        border: 2px solid red;
+      }
+
+      input:invalid + span::before {
+        content: "✖";
+        color: red;
+      }
+
+      input:valid {
+        border: 2px solid rgb(22, 224, 49);
+      }
+
+      input:valid + span::before {
+        content: "✓";
+        color: rgb(22, 224, 49);
+      }
+
+      /* Submit Button */
+      button {
+        width: 60%;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <!-- JS Script for Showing the password-->
+  <script>
+    function showPassword() {
+      var x = document.getElementById("password");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    }
+  </script>
+
+  <body style="background-color: rgb(248, 240, 227)">
+    <div
+      class="navBar"
+      style="
+        margin-bottom: 20px;
+        margin-top: 0px;
+        display: flex;
+        background-color: white;
+      "
+    >
+      <a class="active" href="/">Home</a>
+      <a href="/help">Help</a>
+      <a href="/about">About</a>
+    </div>
+
+    <form>
+      <fieldset style="background-color: white">
+        <legend>Email Information</legend>
+
+        <div>
+          <label for="from">
+            <strong>From</strong>: (Email you are sending Email From)</label
+          >
+          <input id="from" name="from" type="email" required />
+          <span></span>
+        </div>
+        
+        <div>
+          <label for="subject">
+            <strong>Subject</strong>Subject: (The Subject of the Email)</label
+          >
+          <input id="subject" name="subject" type="text" required />
+          <span></span>
+        </div>
+
+        <div>
+          <label for="password">
+            <strong>Password</strong>: (For Email address)
+          </label>
+          <input id="password" name="password" type="password" required />
+          <span></span>
+        </div>
+
+        <div style="display: flex; flex-flow: row">
+          <label for="passwordvisable">Show Password</label>
+          <input
+            style="box-shadow: inset 1px 1px 3px white"
+            type="checkbox"
+            onclick="showPassword()"
+          />
+        </div>
+
+        <div>
+          <label> <strong>HTML File</strong> </label>
+          <label for="file">Choose a file to upload</label>
+          <input id="file" name="file" type="file" />
+          <ul id="file-list"></ul>
+        </div>
+        <script>
+          const fileInput = document.querySelector("#file");
+          const fileList = document.querySelector("#file-list");
+
+          fileInput.addEventListener("change", updateFileList);
+
+          function updateFileList() {
+            while (fileList.firstChild) {
+              fileList.removeChild(fileList.firstChild);
+            }
+
+            let curFiles = fileInput.files;
+
+            if (!(curFiles.length === 0)) {
+              console.log("test");
+              for (let i = 0; i < curFiles.length; i++) {
+                const listItem = document.createElement("li");
+                listItem.textContent =
+                  "File name: " +
+                  curFiles[i].name +
+                  "; file size " +
+                  returnFileSize(curFiles[i].size) +
+                  ".";
+                fileList.appendChild(listItem);
+              }
+            }
+          }
+
+          function returnFileSize(number) {
+            if (number < 1024) {
+              return number + "bytes";
+            } else if (number >= 1024 && number < 1048576) {
+              return (number / 1024).toFixed(1) + "KB";
+            } else if (number >= 1048576) {
+              return (number / 1048576).toFixed(1) + "MB";
+            }
+          }
+        </script>
+      </fieldset>
+
+      <fieldset style="background-color: white">
+        <legend>CSV File</legend>
+
+        <div>
+          <label for="field"> <strong>Field Name</strong>: </label>
+          <input
+            id="field"
+            name="field"
+            type="text"
+            placeholder="EMAIL"
+            required
+          />
+          <span></span>
+        </div>
+
+        <div>
+          <label> <strong>CSV File</strong> </label>
+          <label for="csv">Choose a file to upload</label>
+          <input id="csv" name="csv" type="file" />
+          <ul id="csv-list"></ul>
+        </div>
+
+        <script>
+          const csvInput = document.querySelector("#csv");
+          const csvList = document.querySelector("#csv-list");
+
+          csvInput.addEventListener("change", updateFileList);
+
+          function updateFileList() {
+            while (csvList.firstChild) {
+              csvList.removeChild(csvList.firstChild);
+            }
+
+            let curFiles = csvInput.files;
+
+            if (!(curFiles.length === 0)) {
+              for (let i = 0; i < curFiles.length; i++) {
+                const listItem = document.createElement("li");
+                listItem.textContent =
+                  "File name: " +
+                  curFiles[i].name +
+                  "; file size " +
+                  returnFileSize(curFiles[i].size) +
+                  ".";
+                csvList.appendChild(listItem);
+              }
+            }
+          }
+
+          function returnFileSize(number) {
+            if (number < 1024) {
+              return number + "bytes";
+            } else if (number >= 1024 && number < 1048576) {
+              return (number / 1024).toFixed(1) + "KB";
+            } else if (number >= 1048576) {
+              return (number / 1048576).toFixed(1) + "MB";
+            }
+          }
+        </script>
+      </fieldset>
+
+      <fieldset style="background-color: white">
+        <legend>SMTP Information</legend>
+
+        <div>
+          <label for="host"> <strong>SMTP Host</strong>: </label>
+          <input
+            id="host"
+            name="host"
+            type="text"
+            placeholder="smtp.gmail.com"
+            required
+          />
+          <span></span>
+        </div>
+
+        <div>
+          <label for="port"> <strong>SMTP Port</strong>: </label>
+          <input
+            id="port"
+            name="port"
+            type="number"
+            placeholder="587"
+            required
+          />
+          <span></span>
+        </div>
+        
+      </fieldset>
+    </form>
+  </body>
+</html>

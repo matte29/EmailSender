@@ -7,15 +7,22 @@ import (
 
 // Adds template to a bytes.Buffer.  Takes the location of the HTML template,
 // an interface{} that can be blank
-func SetBody(location string, data interface{}) bytes.Buffer {
+func (s *SMTPInfo) SetBody(location string, index int, data interface{}) error {
 
-	var body bytes.Buffer
+	t, err := template.ParseFiles(location)
 
-	mimeHeaders := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
-	body.Write([]byte(mimeHeaders))
+	if err != nil {
+		return err
+	}
 
-	t, _ := template.ParseFiles(location)
+	s.Body += string(MIME)
 
-	t.Execute(&body, data)
-	return body
+	buffer := new(bytes.Buffer)
+	if err = t.Execute(buffer, data); err != nil {
+		return err
+	}
+	s.Body = buffer.String()
+
+	s.Body = "To: " + s.To[index] + "\r\nSubject: " + s.Subject + "\r\n" + MIME + "\r\n" + s.Body
+	return nil
 }

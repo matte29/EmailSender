@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Help</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap"
+      rel="stylesheet"
+    />
+    
+    <!-- Custom CSS Styles-->
+    <link href="/static/css/navBar.css" rel="stylesheet" />
+
+    <link href="/static/css/fieldset.css" rel="stylesheet" />
+
+    <style>  
+      ul {
+          font-size: large;
+          color: black;
+      }
+    </style>
+  </head>
+  
+
+  <body style="background-color: rgb(248, 240, 227);">
+    <div
+      class="navBar"
+      style="
+        margin-bottom: 20px;
+        margin-top: 0px; 
+        display: flex;
+        background-color: white;
+      "
+    >
+      <a href="/">Home</a>
+      <a class="active" href="/help">Help</a>
+      <a href="/about">About</a>
+    </div>
+
+    <fieldset style="background-color: white;">
+      <legend>Email Information Help</legend>
+      <p>
+        <strong>From</strong>: This is where you need to enter the email address
+        you are sending the emails from.
+      </p>
+
+      <p>
+        <strong>Subject</strong>: This is where you need to enter what you want
+        to be in the subject line of the emails.
+      </p>
+
+      <p>
+        <strong>Password</strong>: This is where you need to enter the password
+        for the email address given above. For some email clients like Gmail /
+        GSuite, you may need to disable secure login in the settings of the
+        email client. To turn on Less secure app access from the settings(Manage your Google Account > Security > Less secure app access)
+      </p>
+      <p>
+        <strong>HTML File</strong>: Here you will click the button and select
+        the HTML file from your computer. This will be used as the body of the
+        email. Currently there is no support for selecting a file from Google
+        Drive, OneDrive or any other cloud storage service.
+      </p>
+    </fieldset>
+
+    <fieldset style="background-color: white;">
+      <legend>CSV File</legend>
+      <p>
+        <strong>Field Name</strong>: This is the name of the Column of the Email from the SQL Database.
+      </p>
+      <p>
+        <strong>CSV File</strong>: Use standered Comma seperated with no trailing comma.
+      </p>
+      
+    </fieldset>
+
+    <fieldset style="background-color: white;">
+      <legend>SMTP Information Help</legend>
+      <p>
+        <strong>SMTP Host</strong>: This is where you need to enter the email
+        service host. 
+        <ul><strong><u>SMTP Host's for most popular Email Clients</u></strong></ul>
+        <ul><strong>Gmail / GSuite</strong>: smtp.gmail.com</ul>
+        <ul><strong>AT&T</strong>: smtp.mail.att.net</ul>
+        <ul><strong>Comcast</strong>: smtp.comcast.net</ul>
+        <ul><strong>iCloud</strong>: smtp.mail.me.com</ul>
+        <ul><strong>Outlook</strong>: smtp-mail.outlook.com</ul>
+        <ul><strong>Yahoo</strong>: smtp.mail.yahoo.com</ul>
+      </p>
+      <p>
+        <strong>SMTP Host</strong>: This is where you need to enter the email
+        service port which is a number. The default port is 587 and is the most common.
+        <ul><strong><u>SMTP Post's </u></strong></ul>
+        <ul><strong>Default</strong>: 587 , This is probably the one.</ul>
+        <ul>25</ul>
+        <ul>465</ul>
+        <ul>2525</ul>
+      </p>
+    </fieldset>
+  </body>
+</html>

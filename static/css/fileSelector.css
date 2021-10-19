@@ -1,0 +1,40 @@
+/* File Selector */
+input[type="file"] {
+  height: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+label[for="file"] {
+  box-shadow: 1px 1px 3px #ccc;
+  background: linear-gradient(to bottom, #eee, #ccc);
+  border: 1px solid rgb(169, 169, 169);
+  border-radius: 5px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+label[for="file"]:hover {
+  background: linear-gradient(to bottom, #fff, #ddd);
+}
+
+label[for="file"]:active {
+  box-shadow: inset 1px 1px 3px #ccc;
+}
+
+label[for="csv"] {
+  box-shadow: 1px 1px 3px #ccc;
+  background: linear-gradient(to bottom, #eee, #ccc);
+  border: 1px solid rgb(169, 169, 169);
+  border-radius: 5px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+label[for="csv"]:hover {
+  background: linear-gradient(to bottom, #fff, #ddd);
+}
+
+label[for="csv"]:active {
+  box-shadow: inset 1px 1px 3px #ccc;
+}
