@@ -7,7 +7,7 @@ type SMTPInfo struct {
 	Password string
 
 	//* Email information for who recieves the Emails
-	To      []string
+	To      map[int]string
 	Subject string
 	Body    string
 }
