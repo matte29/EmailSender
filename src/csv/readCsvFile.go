@@ -21,7 +21,7 @@ import (
 //
 //------------------------------------------------------------
 
-func readCsvFile(filePath string, indexColumn int) map[int]string {
+func ReadCsvFile(filePath string, indexColumn int) map[int]string {
 
 	csvFile, err := os.Open(filePath)
 
