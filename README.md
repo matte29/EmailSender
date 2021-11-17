@@ -1,22 +1,21 @@
 # EmailSender
 
+An application that can be used to send emails to many recipients in a short amount of time.
 
-# Configuration
+## What you need
 
-## Docker-Compose File
-db:
-    image: 
+- An HTML file for the body of the email
 
-For mysql, copy the following after the image:  - mysql/mysql-server
+- A CSV file for the list of recipients (email addresses)
 
-For postgres, copy the following after the image: - postgres
 
-For sq;-server, copy the following after the image: - mcr.microsoft.com/mssql/server
 
-## .env
+## Future features
 
-Create a .env file and put the following values in it with the information required
+I don't know how to word this so here is an example.
 
-![env_file](https://i.imgur.com/u1cA0t1.png)    ![docker-compose](https://i.imgur.com/oQWkiSt.png)
+In the body of the HTML file you can have a {Name} value that can be filled with values from the CSV file.
 
-Some of those values are used for the docker-compose.yml file
+![Example](https://i.imgur.com/riTbrp0.png "Example")
+
+It will take the value from the CSV file and use it to fill that value in HTML that is shown in the email.
