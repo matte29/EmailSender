@@ -2,7 +2,9 @@ package controller
 
 import (
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 
 	"github.com/matte29/EmailSender/src/smtp"
 )
@@ -41,6 +43,46 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		s.Port = r.FormValue("smtpPort")
 		fmt.Fprintf(w, "From = %s\n", s.Port)
 
+		reader, err := r.MultipartReader()
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		//copy each part to destination.
+		for {
+			part, err := reader.NextPart()
+			if err == io.EOF {
+				break
+			}
+
+			//if part.FileName() is empty, skip this iteration.
+			if part.FileName() == "" {
+				continue
+			}
+			dst, err := os.Create("tmp/" + part.FileName())
+			dst.Close()
+
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			if _, err := io.Copy(dst, part); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+
+		//s.To = csv.ReadCsvFile()
+		// var wg sync.WaitGroup
+
+		// var counter int = 0
+		// for {
+		// 	wg.Add(1)
+
+		// }
 		// TODO Read CSV, SetBody, SendMail
 
 	default:
