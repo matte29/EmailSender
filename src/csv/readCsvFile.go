@@ -21,7 +21,7 @@ import (
 //
 //------------------------------------------------------------
 
-func ReadCsvFile(filePath string, indexColumn int) map[int]string {
+func ReadCsvFile(filePath string) map[int]string {
 
 	csvFile, err := os.Open(filePath)
 
@@ -31,9 +31,23 @@ func ReadCsvFile(filePath string, indexColumn int) map[int]string {
 
 	records := csv.NewReader(csvFile)
 
-	var i int = 0
+	var i int = 1
 
 	emails := make(map[int]string)
+
+	record, err := records.Read()
+
+	if err == io.EOF {
+		return emails
+	}
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var indexColumn int = 0
+
+	emails[0] = record[indexColumn]
 
 	for {
 
