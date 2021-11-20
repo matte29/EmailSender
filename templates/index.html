@@ -114,7 +114,7 @@
       <a href="/about">About</a>
     </div>
 
-    <form>
+    <form action="/" method="post" enctype="multipart/form-data">
       <fieldset style="background-color: white">
         <legend>Email Information</legend>
 
@@ -125,7 +125,7 @@
           <input id="from" name="from" type="email" required />
           <span></span>
         </div>
-        
+
         <div>
           <label for="subject">
             <strong>Subject</strong>Subject: (The Subject of the Email)</label
@@ -154,7 +154,7 @@
         <div>
           <label> <strong>HTML File</strong> </label>
           <label for="file">Choose a file to upload</label>
-          <input id="file" name="file" type="file" />
+          <input id="file" name="file" type="file" multiple="multiple"/>
           <ul id="file-list"></ul>
         </div>
         <script>
@@ -197,66 +197,6 @@
         </script>
       </fieldset>
 
-      <fieldset style="background-color: white">
-        <legend>CSV File</legend>
-
-        <div>
-          <label for="field"> <strong>Field Name</strong>: </label>
-          <input
-            id="field"
-            name="field"
-            type="text"
-            placeholder="EMAIL"
-            required
-          />
-          <span></span>
-        </div>
-
-        <div>
-          <label> <strong>CSV File</strong> </label>
-          <label for="csv">Choose a file to upload</label>
-          <input id="csv" name="csv" type="file" />
-          <ul id="csv-list"></ul>
-        </div>
-
-        <script>
-          const csvInput = document.querySelector("#csv");
-          const csvList = document.querySelector("#csv-list");
-
-          csvInput.addEventListener("change", updateFileList);
-
-          function updateFileList() {
-            while (csvList.firstChild) {
-              csvList.removeChild(csvList.firstChild);
-            }
-
-            let curFiles = csvInput.files;
-
-            if (!(curFiles.length === 0)) {
-              for (let i = 0; i < curFiles.length; i++) {
-                const listItem = document.createElement("li");
-                listItem.textContent =
-                  "File name: " +
-                  curFiles[i].name +
-                  "; file size " +
-                  returnFileSize(curFiles[i].size) +
-                  ".";
-                csvList.appendChild(listItem);
-              }
-            }
-          }
-
-          function returnFileSize(number) {
-            if (number < 1024) {
-              return number + "bytes";
-            } else if (number >= 1024 && number < 1048576) {
-              return (number / 1024).toFixed(1) + "KB";
-            } else if (number >= 1048576) {
-              return (number / 1048576).toFixed(1) + "MB";
-            }
-          }
-        </script>
-      </fieldset>
 
       <fieldset style="background-color: white">
         <legend>SMTP Information</legend>
@@ -284,8 +224,10 @@
           />
           <span></span>
         </div>
-        
       </fieldset>
+      <div>
+        <input value="Submit" type="submit" />
+      </div>
     </form>
   </body>
 </html>
