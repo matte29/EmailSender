@@ -2,6 +2,7 @@ package csv
 
 import (
 	"encoding/csv"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -9,18 +10,17 @@ import (
 
 // TODO Allow for the option to read semi-colan instead of commas
 
-//------------------------------------------------------------
+//--------------------------------------------------
 //
 //	filePath: Is a string that is the location of the csv file on the
 //			 users computer
 //
 //
 //	index: Is an integer that holds the column number for the email address.
-//		TODO, In the future will be removed when readCsvFile also grabs data
-//			 for the "data: interface" in SetBody(location, data).
+//		TODO, In the future will be removed when readCsvFile also grabs
+//			data for the "data: interface" in SetBody(location, data).
 //
-//------------------------------------------------------------
-
+//--------------------------------------------------
 func ReadCsvFile(filePath string) map[int]string {
 
 	csvFile, err := os.Open(filePath)
@@ -31,10 +31,10 @@ func ReadCsvFile(filePath string) map[int]string {
 
 	records := csv.NewReader(csvFile)
 
-	var i int = 1
-
 	emails := make(map[int]string)
 
+	//  Reads the first record and sends it to FindIndexOfEmail to get the
+	//  index in the record.
 	record, err := records.Read()
 
 	if err == io.EOF {
@@ -47,7 +47,21 @@ func ReadCsvFile(filePath string) map[int]string {
 
 	var indexColumn int = 0
 
+	indexColumn = FindIndexOfEmail(record)
+
+	//  Returns empty emails if no email address was found in any column of
+	//  first record
+	if indexColumn == -1 {
+		fmt.Println("Error there was no email address found in the first row of the CSV file")
+
+		return emails
+	}
+
+	//--------------------------------------------------
+
 	emails[0] = record[indexColumn]
+
+	var i int = 1
 
 	for {
 
