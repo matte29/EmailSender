@@ -5,7 +5,9 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 
+	"github.com/matte29/EmailSender/src/csv"
 	"github.com/matte29/EmailSender/src/smtp"
 )
 
@@ -43,6 +45,9 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		s.Port = r.FormValue("smtpPort")
 		fmt.Fprintf(w, "From = %s\n", s.Port)
 
+		// Filename for CSV file
+		var csvFileName string
+
 		reader, err := r.MultipartReader()
 
 		if err != nil {
@@ -61,6 +66,11 @@ func Home(w http.ResponseWriter, r *http.Request) {
 			if part.FileName() == "" {
 				continue
 			}
+
+			if strings.Contains(part.FileName(), ".csv") {
+				csvFileName = part.FileName()
+			}
+
 			dst, err := os.Create("tmp/" + part.FileName())
 			dst.Close()
 
@@ -75,7 +85,18 @@ func Home(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		//s.To = csv.ReadCsvFile()
+		// Calls ReadCsvFile to get the emails from the CSV file
+		s.To = csv.ReadCsvFile(csvFileName)
+
+		if len(s.To) == 0 {
+			fmt.Println("Error No Emails were recieved.")
+
+			http.Error(w,
+				"Error No Emails were recieved in the CSV File",
+				http.StatusInternalServerError)
+
+			return
+		}
 		// var wg sync.WaitGroup
 
 		// var counter int = 0
