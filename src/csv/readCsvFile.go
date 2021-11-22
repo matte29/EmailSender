@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 )
 
 // TODO Allow for the option to read semi-colan instead of commas
@@ -52,14 +53,14 @@ func ReadCsvFile(filePath string) map[int]string {
 	//  Returns empty emails if no email address was found in any column of
 	//  first record
 	if indexColumn == -1 {
-		fmt.Println("Error there was no email address found in the first row of the CSV file")
+		fmt.Println("Error there was no email address found CSV file")
 
 		return emails
 	}
 
 	//--------------------------------------------------
 
-	emails[0] = record[indexColumn]
+	emails[0] = strings.TrimSpace(record[indexColumn])
 
 	var i int = 1
 
@@ -75,7 +76,7 @@ func ReadCsvFile(filePath string) map[int]string {
 			log.Fatal(err)
 		}
 
-		emails[i] = record[indexColumn]
+		emails[i] = strings.TrimSpace(record[indexColumn])
 		i++
 	}
 
