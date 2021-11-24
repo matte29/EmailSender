@@ -13,6 +13,7 @@ func main() {
 	http.HandleFunc("/", controller.Home)
 	http.HandleFunc("/help", controller.Help)
 	http.HandleFunc("/about", controller.About)
+	http.HandleFunc("/404", controller.NotFoundPage)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
