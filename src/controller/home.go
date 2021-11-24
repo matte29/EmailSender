@@ -107,7 +107,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		// TODO Read CSV, SetBody, SendMail
 
 	default:
-		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
+		http.Redirect(w, r, "/404", 404)
 	}
 
 }
