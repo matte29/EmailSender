@@ -5,7 +5,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/matte29/EmailSender/src/csv"
 	"github.com/matte29/EmailSender/src/smtp"
@@ -23,67 +22,88 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		http.ServeFile(w, r, "templates/index.html")
+		fmt.Println("Get \"/\" was called.")
 	case "POST":
-		if err := r.ParseForm(); err != nil {
-			fmt.Fprintf(w, "ParseForm() err: %v", err)
-			return
-		}
-		fmt.Fprintf(w, "Post from website! r.PostFrom = %v\n", r.PostForm)
-
-		s.From = r.FormValue("from")
-		fmt.Fprintf(w, "From = %s\n", s.From)
-
-		s.Subject = r.FormValue("subject")
-		fmt.Fprintf(w, "From = %s\n", s.Subject)
-
-		s.Password = r.FormValue("password")
-		fmt.Fprintf(w, "From = %s\n", s.Password)
-
-		s.Host = r.FormValue("smtpHost")
-		fmt.Fprintf(w, "From = %s\n", s.Host)
-
-		s.Port = r.FormValue("smtpPort")
-		fmt.Fprintf(w, "From = %s\n", s.Port)
+		fmt.Println("Post \"/\" was called.")
 
 		// Filename for CSV file
-		var csvFileName string
+		var csvFileName string = "tmp/"
 
-		reader, err := r.MultipartReader()
+		// Filename for HTML file
 
+		var htmlFileName string = "tmp/"
+
+		if err := r.ParseMultipartForm(10 << 20); err != nil {
+			fmt.Println("Error ParseMultipartForm: ", err)
+			return
+		}
+
+		// Upload HTML File
+		htmlFile, handler, err := r.FormFile("file")
+		if err != nil {
+			fmt.Println("Error Retrieving the File")
+			fmt.Println(err)
+			return
+		}
+
+		defer htmlFile.Close()
+
+		htmlFileName += handler.Filename
+
+		dst, err := os.Create("tmp/" + handler.Filename)
+		defer dst.Close()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		//copy each part to destination.
-		for {
-			part, err := reader.NextPart()
-			if err == io.EOF {
-				break
-			}
-
-			//if part.FileName() is empty, skip this iteration.
-			if part.FileName() == "" {
-				continue
-			}
-
-			if strings.Contains(part.FileName(), ".csv") {
-				csvFileName = part.FileName()
-			}
-
-			dst, err := os.Create("tmp/" + part.FileName())
-			dst.Close()
-
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-
-			if _, err := io.Copy(dst, part); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
+		// Copy the uploaded file to the created file on the filesystem
+		if _, err := io.Copy(dst, htmlFile); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
+		//--------------------------------------------------
+
+		// Upload CSV File
+		csvFile, csvHandler, err := r.FormFile("csv")
+		if err != nil {
+			fmt.Println("Error Retrieving the File")
+			fmt.Println(err)
+			return
+		}
+
+		defer csvFile.Close()
+
+		csvFileName += csvHandler.Filename
+
+		copy, err := os.Create("tmp/" + csvHandler.Filename)
+		defer copy.Close()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// Copy the uploaded file to the created file on the filesystem
+		if _, err := io.Copy(copy, csvFile); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		//--------------------------------------------------
+
+		//! Something is wrong with getting these values
+		s.From = r.FormValue("from")
+		fmt.Printf("From = %s\n", s.From)
+
+		s.Subject = r.FormValue("subject")
+		fmt.Printf("Subject = %s\n", s.Subject)
+
+		s.Password = r.FormValue("password")
+
+		s.Host = r.FormValue("host")
+		fmt.Printf("Host = %s\n", s.Host)
+
+		s.Port = r.FormValue("port")
+		fmt.Printf("Port = %s\n", s.Port)
 
 		// Calls ReadCsvFile to get the emails from the CSV file
 		s.To = csv.ReadCsvFile(csvFileName)
@@ -104,7 +124,12 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		// 	wg.Add(1)
 
 		// }
-		// TODO Read CSV, SetBody, SendMail
+		// TODO SetBody, SendMail
+		for i, f := range s.To {
+			s.SetBody(htmlFileName, i, f)
+
+			s.SendEmail(i)
+		}
 
 	default:
 		http.Redirect(w, r, "/404", 404)

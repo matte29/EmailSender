@@ -85,19 +85,14 @@
         width: 60%;
         margin: 0 auto;
       }
+
+      input[type=submit]:valid + input[type=submit]:invalid {
+        content: none;
+        border: black;
+        
+      }
     </style>
   </head>
-  <!-- JS Script for Showing the password-->
-  <script>
-    function showPassword() {
-      var x = document.getElementById("password");
-      if (x.type === "password") {
-        x.type = "text";
-      } else {
-        x.type = "password";
-      }
-    }
-  </script>
 
   <body style="background-color: rgb(248, 240, 227)">
     <div
@@ -122,7 +117,7 @@
           <label for="from">
             <strong>From</strong>: (Email you are sending Email From)</label
           >
-          <input id="from" name="from" type="email" required />
+          <input name="from" type="email" required />
           <span></span>
         </div>
 
@@ -130,7 +125,7 @@
           <label for="subject">
             <strong>Subject</strong>Subject: (The Subject of the Email)</label
           >
-          <input id="subject" name="subject" type="text" required />
+          <input name="subject" type="text" required />
           <span></span>
         </div>
 
@@ -138,7 +133,7 @@
           <label for="password">
             <strong>Password</strong>: (For Email address)
           </label>
-          <input id="password" name="password" type="password" required />
+          <input name="password" type="password" required />
           <span></span>
         </div>
 
@@ -153,8 +148,8 @@
 
         <div>
           <label> <strong>HTML File</strong> </label>
-          <label for="file">Choose a file to upload</label>
-          <input id="file" name="file" type="file" multiple="multiple"/>
+          <label for="file">Choose a HTML file to upload</label>
+          <input id="file" name="file" type="file" />
           <ul id="file-list"></ul>
         </div>
         <script>
@@ -195,6 +190,56 @@
             }
           }
         </script>
+
+      </fieldset>
+
+      <fieldset style="background-color: white">
+        <legend>CSV File</legend>
+
+        <div>
+          <label> <strong>CSV File</strong> </label>
+          <label for="csv">Choose a CSV file to upload</label>
+          <input id="csv" name="csv" type="file" />
+          <ul id="csv-list"></ul>
+        </div>
+
+        <script>
+          const csvInput = document.querySelector("#csv");
+          const csvList = document.querySelector("#csv-list");
+
+          csvInput.addEventListener("change", updateFileList);
+
+          function updateFileList() {
+            while (csvList.firstChild) {
+              csvList.removeChild(csvList.firstChild);
+            }
+
+            let curFiles = csvInput.files;
+
+            if (!(curFiles.length === 0)) {
+              for (let i = 0; i < curFiles.length; i++) {
+                const listItem = document.createElement("li");
+                listItem.textContent =
+                  "File name: " +
+                  curFiles[i].name +
+                  "; file size " +
+                  returnFileSize(curFiles[i].size) +
+                  ".";
+                csvList.appendChild(listItem);
+              }
+            }
+          }
+
+          function returnFileSize(number) {
+            if (number < 1024) {
+              return number + "bytes";
+            } else if (number >= 1024 && number < 1048576) {
+              return (number / 1024).toFixed(1) + "KB";
+            } else if (number >= 1048576) {
+              return (number / 1048576).toFixed(1) + "MB";
+            }
+          }
+        </script>
       </fieldset>
 
 
@@ -204,7 +249,6 @@
         <div>
           <label for="host"> <strong>SMTP Host</strong>: </label>
           <input
-            id="host"
             name="host"
             type="text"
             placeholder="smtp.gmail.com"
@@ -216,7 +260,6 @@
         <div>
           <label for="port"> <strong>SMTP Port</strong>: </label>
           <input
-            id="port"
             name="port"
             type="number"
             placeholder="587"
@@ -226,7 +269,7 @@
         </div>
       </fieldset>
       <div>
-        <input value="Submit" type="submit" />
+        <button value="Submit" type="submit">Submit</button>
       </div>
     </form>
   </body>
