@@ -13,8 +13,13 @@ func (s *SMTPInfo) SendEmail(index int) {
 
 	stringArray = append(stringArray, s.To[index])
 
+	subject := "Subject: " + s.Subject + "!\n"
+
+	msg := []byte(subject + MIME + "\n" + s.Body)
+
 	auth := smtp.PlainAuth("", s.From, s.Password, s.Host)
-	err := smtp.SendMail(s.Host+":"+s.Port, auth, s.From, stringArray, []byte(s.Body))
+
+	err := smtp.SendMail(s.Host+":"+s.Port, auth, s.From, stringArray, msg)
 	if err != nil {
 		fmt.Println(err)
 		return

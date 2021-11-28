@@ -22,14 +22,11 @@ func (s *SMTPInfo) SetBody(location string, index int, data interface{}) error {
 		return err
 	}
 
-	s.Body += string(MIME)
-
 	buffer := new(bytes.Buffer)
 	if err = t.Execute(buffer, data); err != nil {
 		return err
 	}
-	s.Body = buffer.String()
 
-	s.Body = "To: " + s.To[index] + "\r\nSubject: " + s.Subject + "\r\n" + MIME + "\r\n" + s.Body
+	s.Body = buffer.String()
 	return nil
 }
