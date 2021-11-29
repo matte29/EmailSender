@@ -18,7 +18,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	fmt.Printf("Starting server for testing HTTP POST...\n")
-	if err := http.ListenAndServe(":3000", nil); err != nil {
+	if err := http.ListenAndServe("127.0.0.1:3000", nil); err != nil {
 		log.Fatal(err)
 	}
 }
