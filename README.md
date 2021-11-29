@@ -8,12 +8,6 @@ An application that can be used to send emails to many recipients in a short amo
 
 - A CSV file for the list of recipients (email addresses)
 
-
-## Bugs
-
-Doesn't work when it trys to read the values it fails
-
-Error message: 2021/11/26 13:25:10 http: panic serving [::1]:65257: runtime error: invalid memory address or nil pointer dereference
 ## Future features
 
 I don't know how to word this so here is an example.
