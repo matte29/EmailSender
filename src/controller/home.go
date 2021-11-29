@@ -33,7 +33,7 @@ func post(w http.ResponseWriter, r *http.Request) {
 	s.Port = r.FormValue("port")
 
 	// Get and Upload HTML File
-	file, handler, err := r.FormFile("html")
+	file, handler, err := r.FormFile("file")
 	if err != nil {
 		fmt.Println("Error Retrieving the File")
 		fmt.Println(err)

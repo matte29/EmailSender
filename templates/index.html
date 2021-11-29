@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Email Sender</title>
@@ -85,15 +85,19 @@
         width: 60%;
         margin: 0 auto;
       }
-
-      input[type=submit]:valid + input[type=submit]:invalid {
-        content: none;
-        border: black;
-        
-      }
     </style>
   </head>
-
+  <!-- JS Script for Showing the password-->
+  <script>
+    function showPassword() {
+      var x = document.getElementById("password");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    }
+  </script>
   <body style="background-color: rgb(248, 240, 227)">
     <div
       class="navBar"
@@ -109,23 +113,29 @@
       <a href="/about">About</a>
     </div>
 
-    <form action="/" method="post" enctype="multipart/form-data">
+    <form
+      enctype="multipart/form-data"
+      action="http://localhost:3000/"
+      method="post"
+    >
       <fieldset style="background-color: white">
         <legend>Email Information</legend>
 
         <div>
-          <label for="from">
-            <strong>From</strong>: (Email you are sending Email From)</label
-          >
-          <input name="from" type="email" required />
+          <label for="subject">
+            <strong>Subject</strong>
+            Subject: (The Subject of the Email)
+          </label>
+          <input id="subject" name="subject" type="text" required />
           <span></span>
         </div>
 
         <div>
-          <label for="subject">
-            <strong>Subject</strong>Subject: (The Subject of the Email)</label
-          >
-          <input name="subject" type="text" required />
+          <label for="from">
+            <strong>From</strong>
+            : (Email Address you are sending the Email From)
+          </label>
+          <input id="from" name="from" type="email" required />
           <span></span>
         </div>
 
@@ -133,7 +143,7 @@
           <label for="password">
             <strong>Password</strong>: (For Email address)
           </label>
-          <input name="password" type="password" required />
+          <input id="password" name="password" type="password" required />
           <span></span>
         </div>
 
@@ -145,6 +155,38 @@
             onclick="showPassword()"
           />
         </div>
+      </fieldset>
+
+      <fieldset style="background-color: white">
+        <legend>SMTP Information</legend>
+
+        <div>
+          <label for="host"> <strong>SMTP Host</strong>: </label>
+          <input
+            id="host"
+            name="host"
+            type="text"
+            placeholder="smtp.gmail.com"
+            required
+          />
+          <span></span>
+        </div>
+
+        <div>
+          <label for="port"> <strong>SMTP Port</strong>: </label>
+          <input
+            id="port"
+            name="port"
+            type="number"
+            placeholder="587"
+            required
+          />
+          <span></span>
+        </div>
+      </fieldset>
+
+      <fieldset style="background-color: white">
+        <legend>HTML & CSV File Upload</legend>
 
         <div>
           <label> <strong>HTML File</strong> </label>
@@ -153,29 +195,28 @@
           <ul id="file-list"></ul>
         </div>
         <script>
-          const fileInput = document.querySelector("#file");
-          const fileList = document.querySelector("#file-list");
+          const htmlInput = document.querySelector("#file");
+          const htmlList = document.querySelector("#file-list");
 
           fileInput.addEventListener("change", updateFileList);
 
           function updateFileList() {
-            while (fileList.firstChild) {
-              fileList.removeChild(fileList.firstChild);
+            while (htmlList.firstChild) {
+              htmlList.removeChild(htmlList.firstChild);
             }
 
-            let curFiles = fileInput.files;
+            let curHtmlFiles = htmlInput.files;
 
-            if (!(curFiles.length === 0)) {
-              console.log("test");
-              for (let i = 0; i < curFiles.length; i++) {
+            if (!(curHtmlFiles.length === 0)) {
+              for (let i = 0; i < curHtmlFiles.length; i++) {
                 const listItem = document.createElement("li");
                 listItem.textContent =
                   "File name: " +
                   curFiles[i].name +
                   "; file size " +
-                  returnFileSize(curFiles[i].size) +
+                  returnFileSize(curHtmlFiles[i].size) +
                   ".";
-                fileList.appendChild(listItem);
+                htmlList.appendChild(listItem);
               }
             }
           }
@@ -191,21 +232,15 @@
           }
         </script>
 
-      </fieldset>
-
-      <fieldset style="background-color: white">
-        <legend>CSV File</legend>
-
         <div>
           <label> <strong>CSV File</strong> </label>
           <label for="csv">Choose a CSV file to upload</label>
           <input id="csv" name="csv" type="file" />
-          <ul id="csv-list"></ul>
+          <ul id="file-list"></ul>
         </div>
-
         <script>
-          const csvInput = document.querySelector("#csv");
-          const csvList = document.querySelector("#csv-list");
+          const csvInput = document.querySelector("#file");
+          const csvList = document.querySelector("#file-list");
 
           csvInput.addEventListener("change", updateFileList);
 
@@ -241,36 +276,18 @@
           }
         </script>
       </fieldset>
-
-
-      <fieldset style="background-color: white">
-        <legend>SMTP Information</legend>
-
-        <div>
-          <label for="host"> <strong>SMTP Host</strong>: </label>
-          <input
-            name="host"
-            type="text"
-            placeholder="smtp.gmail.com"
-            required
-          />
-          <span></span>
-        </div>
-
-        <div>
-          <label for="port"> <strong>SMTP Port</strong>: </label>
-          <input
-            name="port"
-            type="number"
-            placeholder="587"
-            required
-          />
-          <span></span>
-        </div>
-      </fieldset>
       <div>
         <button value="Submit" type="submit">Submit</button>
       </div>
     </form>
   </body>
 </html>
+
+<!-- <input type="text" name="subject" />
+      <input type="email" name="from" />
+      <input type="password" name="password" />
+      <input type="text" name="host" />
+      <input type="number" name="port" />
+      <input type="file" name="html" />
+      <input type="file" name="csv" />
+      <input type="submit" value="upload" /> -->
